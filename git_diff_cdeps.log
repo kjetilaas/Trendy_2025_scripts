@@ -1,0 +1,320 @@
+diff --git a/datm/cime_config/config_component.xml b/datm/cime_config/config_component.xml
+index c3b5269..b1f5ff3 100644
+--- a/datm/cime_config/config_component.xml
++++ b/datm/cime_config/config_component.xml
+@@ -10,10 +10,11 @@
+        This file may have atm desc entries.
+   -->
+   <description modifier_mode="1">
+-    <desc atm="DATM[%QIA][%WISOQIA][%CRUJRA2024][%CRUv7][%GSWP3v1][%MOSARTTEST][%NLDAS2][%CPLHIST][%1PT][%NYF][%IAF][%JRA][%JRA-1p4-2018][%JRA-1p5-2023][%JRA-RYF6162][%JRA-RYF8485][%JRA-RYF9091][%JRA-RYF0304][%SIMPLE]"> Data driven ATM </desc>
++    <desc atm="DATM[%QIA][%WISOQIA][%CRUJRA2024][%TRENDY25][%CRUv7][%GSWP3v1][%MOSARTTEST][%NLDAS2][%CPLHIST][%1PT][%NYF][%IAF][%JRA][%JRA-1p4-2018][%JRA-1p5-2023][%JRA-RYF6162][%JRA-RYF8485][%JRA-RYF9091][%JRA-RYF0304][%SIMPLE]"> Data driven ATM </desc>
+     <desc option="QIA"> QIAN data set </desc>
+     <desc option="WISOQIA">QIAN with water isotopes</desc>
+     <desc option="CRUJRA2024"> CRUJRA 2024 data set </desc>
++    <desc option="TRENDY25"> CRUJRA 2025 data set for Trendy25 </desc>
+     <desc option="CRUv7"> CLM CRU NCEP v7 data set </desc>
+     <desc option="GSWP3v1"> GSWP3v1 data set </desc>
+     <desc option="NLDAS2"> NLDAS2 regional 0.125 degree data set over the U.S. (25-53N, 235-293E). WARNING: Garbage data will be produced for runs extending beyond this regional domain. </desc>
+@@ -43,13 +44,13 @@
+ 
+   <entry id="DATM_MODE">
+     <type>char</type>
+-    <valid_values>CORE2_NYF,CORE2_IAF,CLM_QIAN,CLM_QIAN_WISO,1PT,CLMCRUJRA2024,CLMCRUNCEPv7,CLMGSWP3v1,CLMNLDAS2,CPLHIST,CORE_IAF_JRA,CORE_IAF_JRA_1p4_2018,CORE_IAF_JRA_1p5_2023,CORE_RYF6162_JRA,CORE_RYF8485_JRA,CORE_RYF9091_JRA,CORE_RYF0304_JRA,ERA5,SIMPLE</valid_values>
++    <valid_values>CORE2_NYF,CORE2_IAF,CLM_QIAN,CLM_QIAN_WISO,1PT,CLMCRUJRA2024,CLMTRENDY25,CLMCRUNCEPv7,CLMGSWP3v1,CLMNLDAS2,CPLHIST,CORE_IAF_JRA,CORE_IAF_JRA_1p4_2018,CORE_IAF_JRA_1p5_2023,CORE_RYF6162_JRA,CORE_RYF8485_JRA,CORE_RYF9091_JRA,CORE_RYF0304_JRA,ERA5,SIMPLE</valid_values>
+     <default_value>CORE2_NYF</default_value>
+     <group>run_component_datm</group>
+     <file>env_run.xml</file>
+     <desc>Mode for data atmosphere component.
+       CORE2_NYF (CORE2 normal year forcing) are modes used in forcing prognostic ocean/sea-ice components.
+-      CLMCRUJRA2024, CLMCRUNCEPv7, CLMGSWP3v1, CLMNLDAS2 and 1PT are modes using observational data for forcing prognostic land components.
++      CLMCRUJRA2024, CLMTRENDY25, CLMCRUNCEPv7, CLMGSWP3v1, CLMNLDAS2 and 1PT are modes using observational data for forcing prognostic land components.
+       WARNING for CLMNLDAS2: This is a regional forcing dataset over the U.S. (25-53N, 235-293E). Garbage data will be produced for runs extending beyond this regional domain. </desc>
+     <values match="last">
+       <value compset="DATM%NYF">CORE2_NYF</value>
+@@ -64,6 +65,7 @@
+       <value compset="DATM%QIA">CLM_QIAN</value>
+       <value compset="DATM%WISOQIA">CLM_QIAN_WISO</value>
+       <value compset="DATM%CRUJRA2024">CLMCRUJRA2024</value>
++      <value compset="DATM%TRENDY25">CLMTRENDY25</value>
+       <value compset="DATM%CRUv7">CLMCRUNCEPv7</value>
+       <value compset="DATM%GSWP3v1">CLMGSWP3v1</value>
+       <value compset="DATM%NLDAS2">CLMNLDAS2</value>
+@@ -161,7 +163,7 @@
+ 
+   <entry id="DATM_CO2_TSERIES">
+     <type>char</type>
+-    <valid_values>none,20tr,20tr.latbnd,omip.iaf,omip.jra,SSP1-1.9,SSP1-2.6,SSP2-4.5,SSP3-7.0,SSP4-3.4,SSP4-6.0,SSP5-3.4,SSP5-8.5,SSP1-1.9.latbnd,SSP1-2.6.latbnd,SSP2-4.5.latbnd,SSP3-7.0.latbnd,SSP4-3.4.latbnd,SSP4-6.0.latbnd,SSP5-3.4.latbnd,SSP5-8.5.latbnd</valid_values>
++    <valid_values>none,20tr,20trtrendy25,20tr.latbnd,omip.iaf,omip.jra,SSP1-1.9,SSP1-2.6,SSP2-4.5,SSP3-7.0,SSP4-3.4,SSP4-6.0,SSP5-3.4,SSP5-8.5,SSP1-1.9.latbnd,SSP1-2.6.latbnd,SSP2-4.5.latbnd,SSP3-7.0.latbnd,SSP4-3.4.latbnd,SSP4-6.0.latbnd,SSP5-3.4.latbnd,SSP5-8.5.latbnd</valid_values>
+     <default_value>none</default_value>
+     <values match="last">
+       <value compset="^SSP119_">SSP1-1.9</value>
+@@ -224,10 +226,12 @@
+       <value compset="2000.*_DATM%1PT">$DATM_YR_START</value>
+       <value compset="1850.*_DATM%QIA">1</value>
+       <value compset="1850.*_DATM%CRUJRA2024">1</value>
++      <value compset="1850.*_DATM%TRENDY25">1</value>
+       <value compset="1850.*_DATM%CRUv7">1</value>
+       <value compset="1850.*_DATM%GSW">1</value>
+       <value compset="HIST.*_DATM%QIA">1895</value>
+       <value compset="HIST.*_DATM%CRUJRA2024">1901</value>
++      <value compset="HIST.*_DATM%TRENDY25">1901</value>
+       <value compset="HIST.*_DATM%CRUv7">1901</value>
+       <value compset="HIST.*_DATM%GSW">1901</value>
+       <value compset="HIST.*_DATM%NLDAS2">$DATM_YR_START</value>
+@@ -272,6 +276,7 @@
+       <value compset="2000.*_DATM%1PT" grid="1x1_urbanc_alpha" >1</value>
+       <value compset="1850.*_DATM%QIA">1948</value>
+       <value compset="1850.*_DATM%CRUJRA2024">1901</value>
++      <value compset="1850.*_DATM%TRENDY25">1901</value>
+       <value compset="1850.*_DATM%CRUv7">1901</value>
+       <value compset="1850.*_DATM%GSW">1901</value>
+       <value compset="1850.*_DATM%NLDAS2">0</value>  <!-- Unsupported -->
+@@ -279,6 +284,7 @@
+       <value compset="2000.*_DATM%QIA">1972</value>
+       <value compset="HIST.*_DATM%QIA">1948</value>
+       <value compset="HIST.*_DATM%CRUJRA2024">1901</value>
++      <value compset="HIST.*_DATM%TRENDY25">1901</value>
+       <value compset="HIST.*_DATM%CRUv7">1901</value>
+       <value compset="HIST.*_DATM%GSW">1901</value>
+       <value compset="HIST.*_DATM%NLDAS2">0</value>  <!-- Unsupported -->
+@@ -334,6 +340,7 @@
+       <value   compset="2000.*_DATM%1PT" grid="1x1_urbanc_alpha" >2</value>
+       <value   compset="1850.*_DATM%QIA">1972</value>
+       <value   compset="1850.*_DATM%CRUJRA2024">1920</value>
++      <value   compset="1850.*_DATM%TTRENDY25">1920</value>
+       <value   compset="1850.*_DATM%CRUv7">1920</value>
+       <value   compset="1850.*_DATM%GSW">1920</value>
+       <value   compset="1850.*_DATM%NLDAS2">-1</value>  <!-- Unsupported -->
+@@ -341,6 +348,7 @@
+       <value   compset="2000.*_DATM%QIA">2004</value>
+       <value   compset="HIST.*_DATM%QIA">1972</value>
+       <value   compset="HIST.*_DATM%CRUJRA2024">1920</value>
++      <value   compset="HIST.*_DATM%TRENDY25">1920</value>
+       <value   compset="HIST.*_DATM%CRUv7">1920</value>
+       <value   compset="HIST.*_DATM%GSW">1920</value>
+       <value   compset="HIST.*_DATM%NLDAS2">-1</value>  <!-- Unsupported -->
+diff --git a/datm/cime_config/namelist_definition_datm.xml b/datm/cime_config/namelist_definition_datm.xml
+index 54eb03b..9330d98 100644
+--- a/datm/cime_config/namelist_definition_datm.xml
++++ b/datm/cime_config/namelist_definition_datm.xml
+@@ -22,6 +22,9 @@
+       <value datm_mode="CLMCRUJRA2024">
+         CLMCRUJRA2024.Solar,CLMCRUJRA2024.Precip,CLMCRUJRA2024.TPQW
+       </value>
++      <value datm_mode="CLMTRENDY25">
++        CLMTRENDY25.Solar,CLMTRENDY25.Precip,CLMTRENDY25.TPQW
++      </value>      
+       <value datm_mode="CLMCRUNCEPv7">
+         CLMCRUNCEPv7.Solar,CLMCRUNCEPv7.Precip,CLMCRUNCEPv7.TPQW
+       </value>
+diff --git a/datm/cime_config/stream_definition_datm.xml b/datm/cime_config/stream_definition_datm.xml
+index d027deb..887f499 100644
+--- a/datm/cime_config/stream_definition_datm.xml
++++ b/datm/cime_config/stream_definition_datm.xml
+@@ -30,6 +30,7 @@
+   CLM_QIAN              = Run with the CLM Qian dataset valid from 1948 to 2004 (force CLM)
+   CLM_QIAN_WISO         = Run with the CLM Qian dataset with isotopes valid from 2000 to 2004 (force CLM)
+   CLMCRUJRA2024         = Run with the CLM CRUJRA 2024 forcing valid from 1901 to 2023 (force CLM)
++  CLMTRENDY25           = Run with the CLM CRUJRA 2025 forcing valid from 1901 to 2024 for TRENDY (force CLM)
+   CLMCRUNCEPv7          = Run with the CLM CRU NCEP V7 forcing valid from 1900 to 2010 (force CLM)
+   CLMGSWP3v1            = Run with the CLM GSWP3 V1 forcing (force CLM)
+   CLMNLDAS2             = Run with the CLM NLDAS2 regional forcing valid from 1980 to 2018 (force CLM)
+@@ -77,6 +78,13 @@
+   CLMCRUJRA2024.Precip
+   CLMCRUJRA2024.TPQW
+ 
++  ========================
++  datm_mode CLMTRENDY25: (DATM%TRENDY25 in env_run.xml)
++  ========================
++  CLMTRENDY25.Solar
++  CLMTRENDY25.Precip
++  CLMTRENDY25.TPQW
++
+   ========================
+   datm_mode CLMCRUNCEPv7: (DATM%CRUv7 in env_run.xml)
+   ========================
+@@ -148,6 +156,7 @@
+   - DATM_CO2_TSERIES is set by the 4 character time prefix in config_component.xml
+   ========================
+   co2tseries.20tr
++  co2tseries.20trtrendy25
+   co2tseries.20tr.latbnd
+   co2tseries.omip.iaf
+   co2tseries.omip.jra
+@@ -599,6 +608,108 @@
+     <stream_readmode>single</stream_readmode>
+   </stream_entry>
+ 
++  <!-- ===================================  -->
++  <!-- datm_mode CLMTRENDY25                   -->
++  <!-- ===================================  -->
++
++  <stream_entry name="CLMTRENDY25.Solar">
++    <stream_meshfile>
++      <meshfile>$DIN_LOC_ROOT_CLMFORC/three_stream/ESMFmesh_CRUJRAv2.5_c2024.5d_mask_240722.nc</meshfile>
++    </stream_meshfile>
++    <stream_datafiles>
++      <file first_year="1700" last_year="2024">$DIN_LOC_ROOT_CLMFORC/three_stream/clmforc.CRUJRAv3_0.5x0.5.Solr_Diffuse.%y.nc</file>
++    </stream_datafiles>
++    <stream_datavars>
++      <var>FSDS_DIRECT     Faxa_swdndr</var>
++      <var>FSDS_DIFFUSE    Faxa_swdndf</var>
++    </stream_datavars>
++    <stream_lev_dimname>null</stream_lev_dimname>
++    <stream_mapalgo>
++      <mapalgo>bilinear</mapalgo>
++    </stream_mapalgo>
++    <stream_vectors>null</stream_vectors>
++    <stream_year_align>$DATM_YR_ALIGN</stream_year_align>
++    <stream_year_first>$DATM_YR_START</stream_year_first>
++    <stream_year_last>$DATM_YR_END</stream_year_last>
++    <stream_offset>0</stream_offset>
++    <stream_tintalgo>
++      <tintalgo>coszen</tintalgo>
++    </stream_tintalgo>
++    <stream_taxmode>
++      <taxmode>cycle</taxmode>
++    </stream_taxmode>
++    <stream_dtlimit>
++      <dtlimit>1.5</dtlimit>
++    </stream_dtlimit>
++    <stream_readmode>single</stream_readmode>
++  </stream_entry>
++
++  <stream_entry name="CLMTRENDY25.Precip">
++    <stream_meshfile>
++      <meshfile>$DIN_LOC_ROOT_CLMFORC/three_stream/ESMFmesh_CRUJRAv2.5_c2024.5d_mask_240722.nc</meshfile>
++    </stream_meshfile>
++    <stream_datafiles>
++      <file first_year="1700" last_year="2024">$DIN_LOC_ROOT_CLMFORC/three_stream/clmforc.CRUJRAv3_0.5x0.5.Prec.%y.nc</file>
++    </stream_datafiles>
++    <stream_datavars>
++      <var>PRECTmms Faxa_precn</var>
++    </stream_datavars>
++    <stream_lev_dimname>null</stream_lev_dimname>
++    <stream_mapalgo>
++      <mapalgo>bilinear</mapalgo>
++    </stream_mapalgo>
++    <stream_vectors>null</stream_vectors>
++    <stream_year_align>$DATM_YR_ALIGN</stream_year_align>
++    <stream_year_first>$DATM_YR_START</stream_year_first>
++    <stream_year_last>$DATM_YR_END</stream_year_last>
++    <stream_offset>0</stream_offset>
++    <stream_tintalgo>
++      <tintalgo>nearest</tintalgo>
++    </stream_tintalgo>
++    <stream_taxmode>
++      <taxmode>cycle</taxmode>
++    </stream_taxmode>
++    <stream_dtlimit>
++      <dtlimit>1.5</dtlimit>
++    </stream_dtlimit>
++    <stream_readmode>single</stream_readmode>
++  </stream_entry>
++
++  <stream_entry name="CLMTRENDY25.TPQW">
++    <stream_meshfile>
++      <meshfile>$DIN_LOC_ROOT_CLMFORC/three_stream/ESMFmesh_CRUJRAv2.5_c2024.5d_mask_240722.nc</meshfile>
++    </stream_meshfile>
++    <stream_datafiles>
++      <file first_year="1700" last_year="2024">$DIN_LOC_ROOT_CLMFORC/three_stream/clmforc.CRUJRAv3_0.5x0.5.TPQWL.%y.nc</file>
++    </stream_datafiles>
++    <stream_datavars>
++      <var>TBOT     Sa_tbot</var>
++      <var>WIND     Sa_wind</var>
++      <var>QBOT     Sa_shum</var>
++      <var>PSRF     Sa_pbot</var>
++      <var>FLDS     Faxa_lwdn</var>
++    </stream_datavars>
++    <stream_lev_dimname>null</stream_lev_dimname>
++    <stream_mapalgo>
++      <mapalgo>bilinear</mapalgo>
++    </stream_mapalgo>
++    <stream_vectors>null</stream_vectors>
++    <stream_year_align>$DATM_YR_ALIGN</stream_year_align>
++    <stream_year_first>$DATM_YR_START</stream_year_first>
++    <stream_year_last>$DATM_YR_END</stream_year_last>
++    <stream_offset>0</stream_offset>
++    <stream_tintalgo>
++      <tintalgo>linear</tintalgo>
++    </stream_tintalgo>
++    <stream_taxmode>
++      <taxmode>cycle</taxmode>
++    </stream_taxmode>
++    <stream_dtlimit>
++      <dtlimit>1.5</dtlimit>
++    </stream_dtlimit>
++    <stream_readmode>single</stream_readmode>
++  </stream_entry>
++ 
+   <!-- ===================================  -->
+   <!-- datm_mode CLMCRUNCEPv7               -->
+   <!-- ===================================  -->
+@@ -3735,6 +3846,37 @@
+     <stream_readmode>single</stream_readmode>
+   </stream_entry>
+ 
++  <stream_entry name="co2tseries.20trtrendy25">
++    <stream_meshfile>
++      <meshfile>none</meshfile>
++    </stream_meshfile>
++    <stream_datafiles>
++      <file>/cluster/work/users/kjetisaa/Trendy_2025_forcing/CO2field/fco2_datm_global_simyr_1700-2024_TRENDY_c250625.nc</file>
++    </stream_datafiles>
++    <stream_datavars>
++      <var>CO2   Sa_co2diag</var>
++    </stream_datavars>
++    <stream_lev_dimname>null</stream_lev_dimname>
++    <stream_mapalgo>
++      <mapalgo>none</mapalgo>
++    </stream_mapalgo>
++    <stream_vectors>null</stream_vectors>
++    <stream_year_align>1700</stream_year_align>
++    <stream_year_first>1700</stream_year_first>
++    <stream_year_last>2024</stream_year_last>
++    <stream_offset>0</stream_offset>
++    <stream_tintalgo>
++      <tintalgo>linear</tintalgo>
++    </stream_tintalgo>
++    <stream_taxmode>
++      <taxmode>extend</taxmode>
++    </stream_taxmode>
++    <stream_dtlimit>
++      <dtlimit>1.e30</dtlimit>
++    </stream_dtlimit>
++    <stream_readmode>single</stream_readmode>
++  </stream_entry>
++
+   <stream_entry name="co2tseries.omip.iaf">
+     <stream_meshfile>
+       <meshfile>none</meshfile>
+@@ -4465,10 +4607,10 @@
+       <tintalgo>linear</tintalgo>
+     </stream_tintalgo>
+     <stream_taxmode>
+-      <taxmode>cycle</taxmode>
++      <taxmode>extend</taxmode>
+     </stream_taxmode>
+     <stream_dtlimit>
+-      <dtlimit>1.5</dtlimit>
++      <dtlimit>1.e30</dtlimit>
+     </stream_dtlimit>
+     <stream_readmode>single</stream_readmode>
+   </stream_entry>
+diff --git a/doc/source/datm.rst b/doc/source/datm.rst
+index 847df41..e44c48d 100644
+--- a/doc/source/datm.rst
++++ b/doc/source/datm.rst
+@@ -121,6 +121,12 @@ DATM%CLM_QIAN
+    - streams: CLM_QIAN.Solar,CLM_QIAN.Precip,CLM_QIAN.TPQW
+    - datamode: CLMNCEP
+ 
++DATM%CLMTRENDY25
++   - TRENDY25 atm input data (CESM I compsets)
++   - datm_mode: CLMNCEP
++   - streams: CLMTRENDY25.Solar,CLMTRENDY25.Precip,CLMTRENDY25.TPQW
++   - datamode: CLMNCEP
++
+ DATM%CLMCRUJRA2024
+    - CRUJRA atm input data (CESM I compsets)
+    - datm_mode: CLMNCEP

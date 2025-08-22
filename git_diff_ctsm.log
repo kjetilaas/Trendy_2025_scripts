@@ -1,0 +1,122 @@
+diff --git a/bld/CLMBuildNamelist.pm b/bld/CLMBuildNamelist.pm
+index 61863d8f0..618583886 100755
+--- a/bld/CLMBuildNamelist.pm
++++ b/bld/CLMBuildNamelist.pm
+@@ -1227,7 +1227,7 @@ sub setup_cmdl_spinup {
+      }
+   }
+   $log->verbose_message("CLM accelerated spinup mode is $val");
+-  if ( &value_is_true($nl_flags->{'use_cn'}) ) {
++  if ( &value_is_true($nl_flags->{'use_cn'}) or &value_is_true($nl_flags->{'use_fates'}) ) {
+     add_default($opts, $nl_flags->{'inputdata_rootdir'}, $definition,
+                 $defaults, $nl, "spinup_state", clm_accelerated_spinup=>$nl_flags->{'clm_accelerated_spinup'},
+                 use_cn=>$nl_flags->{'use_cn'}, use_fates=>$nl_flags->{'use_fates'},
+@@ -1245,7 +1245,7 @@ sub setup_cmdl_spinup {
+        $nl_flags->{'bgc_spinup'} = "off";
+     }
+     # For AD spinup mode by default reseed dead plants
+-    if ( $nl_flags->{$var} ne "off" ) {
++    if ( $nl_flags->{$var} ne "off"  and (not &value_is_true($nl_flags->{'use_fates'}) )) {
+         add_default($opts, $nl_flags->{'inputdata_rootdir'}, $definition,
+                     $defaults, $nl, "reseed_dead_plants", clm_accelerated_spinup=>$nl_flags->{$var},
+                     use_cn=>$nl_flags->{'use_cn'} );
+diff --git a/bld/namelist_files/namelist_definition_ctsm.xml b/bld/namelist_files/namelist_definition_ctsm.xml
+index 820975655..a38e9a29b 100644
+--- a/bld/namelist_files/namelist_definition_ctsm.xml
++++ b/bld/namelist_files/namelist_definition_ctsm.xml
+@@ -2280,7 +2280,7 @@ Land mask description
+ <!-- lnd_tuning_mode, there needs to be a setting for: CRUJRA2024, CRUv7, GSWP3v1, cam6.0, and cam7.0 for each valid physics option; exceptions include clm4_5_CRUJRA2024 and clm6_0_CRUv7 -->
+ <entry id="lnd_tuning_mode" type="char*20" category="default_settings"
+        group="default_settings"
+-       valid_values="clm4_5_CRUv7,clm4_5_GSWP3v1,clm4_5_cam7.0,clm4_5_cam6.0,clm4_5_cam5.0,clm4_5_cam4.0,clm5_0_cam7.0,clm5_0_cam6.0,clm5_0_cam5.0,clm5_0_cam4.0,clm5_0_CRUv7,clm5_0_GSWP3v1,clm5_0_CRUJRA2024,clm6_0_GSWP3v1,clm6_0_CRUJRA2024,clm6_0_cam7.0,clm6_0_cam6.0,clm6_0_cam5.0,clm6_0_cam4.0">
++       valid_values="clm4_5_CRUv7,clm4_5_GSWP3v1,clm4_5_cam7.0,clm4_5_cam6.0,clm4_5_cam5.0,clm4_5_cam4.0,clm5_0_cam7.0,clm5_0_cam6.0,clm5_0_cam5.0,clm5_0_cam4.0,clm5_0_CRUv7,clm5_0_GSWP3v1,clm5_0_CRUJRA2024,clm6_0_GSWP3v1,clm6_0_CRUJRA2024,clm6_0_TRENDY25,clm6_0_cam7.0,clm6_0_cam6.0,clm6_0_cam5.0,clm6_0_cam4.0">
+ General configuration of model version and atmospheric forcing to tune the model to run under.
+ This sets the model to run with constants and initial conditions that were set to run well under 
+ the configuration of model version and atmospheric forcing. To run well constants would need to be changed
+diff --git a/cime_config/buildnml b/cime_config/buildnml
+index dfc1b37ed..739c53a72 100644
+--- a/cime_config/buildnml
++++ b/cime_config/buildnml
+@@ -106,6 +106,7 @@ def buildnml(case, caseroot, compname):
+         "clm5_0_NLDAS2": "clm5_0_GSWP3v1",
+         "clm5_0_ERA5": "clm5_0_GSWP3v1",
+         "clm5_0_CRUJRA2024": "clm5_0_GSWP3v1",
++        "clm5_0_TRENDY25": "clm5_0_GSWP3v1",        
+         "clm6_0_1PT": "clm6_0_GSWP3v1",
+         "clm6_0_QIAN": "clm6_0_GSWP3v1",
+         "clm6_0_NLDAS2": "clm6_0_GSWP3v1",
+diff --git a/cime_config/config_component.xml b/cime_config/config_component.xml
+index 0eba609c2..08d9b0d00 100644
+--- a/cime_config/config_component.xml
++++ b/cime_config/config_component.xml
+@@ -65,6 +65,7 @@
+           that have been tuned. The buildnml will also warn you if a tuning combination is based on another set.
+           Atm forcing options:
+                CRUJRA2024
++               TRENDY25               
+                CRUv7
+                GSWP3
+                CAM4.0
+@@ -79,7 +80,7 @@
+     </desc>
+     <default_value>UNSET</default_value>
+     <!-- List of forcing options for each CLM physics option: CRUJRA2024, CRUv7, GSWP3, cam7.0, cam6.0, cam5.0, cam4.0, QIAN, 1PT, NLDAS2, ERA5 -->
+-    <valid_values>clm5_0_cam6.0,clm5_0_cam7.0,clm5_0_cam5.0,clm5_0_cam4.0,clm5_0_GSWP3v1,clm5_0_CRUJRA2024,clm5_0_CRUv7,clm5_0_QIAN,clm5_0_1PT,clm5_0_NLDAS2,clm5_0_ERA5,clm4_5_CRUv7,clm4_5_GSWP3v1,clm4_5_QIAN,clm4_5_cam6.0,clm4_5_cam7.0,clm4_5_cam5.0,clm4_5_cam4.0,clm4_5_1PT,clm4_5_NLDAS2,clm4_5_ERA5,clm6_0_CRUv7,clm6_0_GSWP3v1,clm6_0_CRUJRA2024,clm6_0_cam6.0,clm6_0_cam7.0,clm6_0_cam5.0,clm6_0_cam4.0,clm6_0_QIAN,clm6_0_1PT,clm6_0_NLDAS2,clm6_0_ERA5</valid_values>
++    <valid_values>clm5_0_cam6.0,clm5_0_cam7.0,clm5_0_cam5.0,clm5_0_cam4.0,clm5_0_GSWP3v1,clm5_0_CRUJRA2024,clm5_0_CRUv7,clm5_0_QIAN,clm5_0_1PT,clm5_0_NLDAS2,clm5_0_ERA5,clm4_5_CRUv7,clm4_5_GSWP3v1,clm4_5_QIAN,clm4_5_cam6.0,clm4_5_cam7.0,clm4_5_cam5.0,clm4_5_cam4.0,clm4_5_1PT,clm4_5_NLDAS2,clm4_5_ERA5,clm6_0_CRUv7,clm6_0_GSWP3v1,clm6_0_CRUJRA2024,clm6_0_TRENDY25,clm6_0_cam6.0,clm6_0_cam7.0,clm6_0_cam5.0,clm6_0_cam4.0,clm6_0_QIAN,clm6_0_1PT,clm6_0_NLDAS2,clm6_0_ERA5</valid_values>
+     <values match="last">
+       <!-- Options for atm forcing are: CRUJRA2024, CRUv7, GSWP3, cam6.0 (also used for DATM%CPLHIST), cam5.0, cam4.0, QIAN, WISOQIA, 1PT, NLDAS2, and ERA5) -->
+       <!-- All the clm4_5 physics options -->
+@@ -115,6 +116,7 @@
+       <value compset="DATM%ERA5_CLM50"   >clm5_0_ERA5</value>
+       <!-- All the clm6_0 physics options -->
+       <value compset="DATM%CRUJRA2024_CLM60">clm6_0_CRUJRA2024</value>
++      <value compset="DATM%TRENDY25_CLM60">clm6_0_TRENDY25</value>      
+       <value compset="DATM%CRUv7_CLM60"  >clm6_0_CRUv7</value>
+       <value compset="SATM_CLM60"        >clm6_0_GSWP3v1</value>
+       <value compset="DATM%GSWP3v1_CLM60">clm6_0_GSWP3v1</value>
+diff --git a/cime_config/config_pes.xml b/cime_config/config_pes.xml
+index 6bc7ffd6e..57d5c9bff 100644
+--- a/cime_config/config_pes.xml
++++ b/cime_config/config_pes.xml
+@@ -2014,13 +2014,13 @@
+ 	<comment>none</comment>
+ 	<ntasks>
+ 	  <ntasks_atm>-1</ntasks_atm>
+-	  <ntasks_lnd>-7</ntasks_lnd>
+-	  <ntasks_rof>-7</ntasks_rof>
+-	  <ntasks_ice>-7</ntasks_ice>
+-	  <ntasks_ocn>-7</ntasks_ocn>
+-	  <ntasks_glc>-7</ntasks_glc>
+-	  <ntasks_wav>-7</ntasks_wav>
+-	  <ntasks_cpl>-7</ntasks_cpl>
++	  <ntasks_lnd>-17</ntasks_lnd>
++	  <ntasks_rof>-17</ntasks_rof>
++	  <ntasks_ice>-17</ntasks_ice>
++	  <ntasks_ocn>-17</ntasks_ocn>
++	  <ntasks_glc>-17</ntasks_glc>
++	  <ntasks_wav>-17</ntasks_wav>
++	  <ntasks_cpl>-17</ntasks_cpl>
+ 	</ntasks>
+ 	<nthrds>
+ 	  <nthrds_atm>1</nthrds_atm>
+@@ -2121,7 +2121,7 @@
+     </mach>
+   </grid>
+ 
+-  <grid name="l%1.9x2.5|l%ne16np4.pg3">
++  <grid name="l%ne16np4.pg3">
+     <mach name="betzy">
+       <pes pesize="L" compset="any">
+ 	<comment>none</comment>
+diff --git a/components/cdeps b/components/cdeps
+--- a/components/cdeps
++++ b/components/cdeps
+@@ -1 +1 @@
+-Subproject commit 24369b135b100d8c6a0816012b5ed0a79d6c9703
++Subproject commit 24369b135b100d8c6a0816012b5ed0a79d6c9703-dirty
+diff --git a/src/fates b/src/fates
+--- a/src/fates
++++ b/src/fates
+@@ -1 +1 @@
+-Subproject commit 2a1ffb309b25bd442f13315bbf0c374033a47834
++Subproject commit 2a1ffb309b25bd442f13315bbf0c374033a47834-dirty
