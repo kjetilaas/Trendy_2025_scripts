@@ -20,7 +20,7 @@ noresmrepo="ctsm5.3.045_noresm_v10"
 noresmversion="ctsm5.3.045_noresm_v10"
 
 resolution="f19_g17" #f19_g17, ne30pg3_tn14, f45_f45_mg37, ne16pg3_tn14, hcru_hcru_mt13
-casename="iHIST1700.$resolution.fatesnocomp.$noresmversion.S3_TRENDY2025_pt3.202508021"
+casename="iHIST1700.$resolution.fatesnocomp.$noresmversion.S3_TRENDY2025_pt3_corrected.202508024"
 
 compset="HIST_DATM%TRENDY25_CLM60%FATES_SICE_SOCN_SROF_SGLC_SWAV_SESP"
 
@@ -94,7 +94,8 @@ then
         ./xmlchange DIN_LOC_ROOT_CLMFORC=/cluster/work/users/kjetisaa/Trendy_2025_forcing/
         ./xmlchange STOP_OPTION=nyears
         ./xmlchange STOP_N=124 
-        ./xmlchange RESUBMIT=0 
+        ./xmlchange RESUBMIT=0
+        ./xmlchange REST_N=62 
         ./xmlchange --subgroup case.run JOB_WALLCLOCK_TIME=60:00:00
         ./xmlchange --subgroup case.st_archive JOB_WALLCLOCK_TIME=00:30:00    
         ./xmlchange RUN_STARTDATE=1901-01-01
@@ -146,7 +147,7 @@ then
         #echo "hist_mfilt = 10" >> $workpath$casename/user_nl_clm
         #echo "hist_nhtfrq = -8760" >> $workpath$casename/user_nl_clm   
         #TEST: Set finidat to a restart file from previous run  
-        echo "finidat = '/cluster/projects/nn9188k/kjetisaa/Trendy25//iHIST1700.f19_g17.fatesnocomp.ctsm5.3.045_noresm_v10.S3_TRENDY2025_pt2.202508020.clm2.r.1901-01-01-00000.nc' " >> user_nl_clm
+        echo "finidat = '/cluster/projects/nn9188k/kjetisaa/Trendy25//iHIST1700.f19_g17.fatesnocomp.ctsm5.3.045_noresm_v10.S3_TRENDY2025_pt2_corrected.202508021.clm2.r.1901-01-01-00000.nc' " >> user_nl_clm
     fi
 fi
 

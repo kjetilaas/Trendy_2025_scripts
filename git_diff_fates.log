@@ -12,6 +12,19 @@ index 82667f1f..3781a930 100644
              else
                 harvest_rate = 0._r8
              endif
+diff --git a/biogeochem/EDPatchDynamicsMod.F90 b/biogeochem/EDPatchDynamicsMod.F90
+index 1d8b824f..2127134e 100644
+--- a/biogeochem/EDPatchDynamicsMod.F90
++++ b/biogeochem/EDPatchDynamicsMod.F90
+@@ -3553,7 +3553,7 @@ contains
+           else
+              write(fates_log(),*) 'this isnt because the land use was less than allowed'
+ 
+-             call endrun(msg=errMsg(sourcefile, __LINE__))
++             !call endrun(msg=errMsg(sourcefile, __LINE__))
+           
+              ! Note to user. If you DO decide to remove the end-run above this line
+              ! Make sure that you keep the pointer below this line, or you will get
 diff --git a/main/EDMainMod.F90 b/main/EDMainMod.F90
 index 8fa97d3b..3a7e6611 100644
 --- a/main/EDMainMod.F90
